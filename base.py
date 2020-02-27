@@ -35,7 +35,7 @@ class Numeric():
         from sklearn.preprocessing import StandardScaler
         sc = StandardScaler()
         for item in columns:
-            dataframe = sc.fit_transform(dataframe[:,item:item+1])
+            dataframe[:, item:item+1] = sc.fit_transform(dataframe[:, item:item+1])
         print('Feature scaling completed')
         return dataframe
 
