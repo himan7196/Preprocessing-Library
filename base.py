@@ -1,11 +1,12 @@
 '''Add the name of the package you want to use in the setup.py file'''
-#import setup
+import setup
 import numpy
 import nltk
 
 from nltk.tokenize.toktok import ToktokTokenizer
 # Download the required data
 # nltk.download('stopwords')
+# nltk.download('wordnet')
 
 class Configuration:
     def text_data_configuration(self, only_alpha=False, stem=False, lemma=False, stopword_removal=False, handle_null=False):
@@ -19,7 +20,6 @@ class Configuration:
 
     def numerical_data_configuration(self, feature_scaling=False, handle_null=False):
         self._feature_scaling = feature_scaling
-        #will replace the null value by the mean of all values as of now
         self._handle_numeric_null = handle_null
 
 
@@ -30,16 +30,16 @@ class Numeric():
                 self.handle_null(dataframe, item)
         if Configuration._feature_scaling == True:
             for item in columns:
-                self.handle_null(dataframe, item)
+                self.feature_scaling(dataframe, item)
 
 
     def feature_scaling(self, dataframe, *columns):
         from sklearn.preprocessing import StandardScaler
         sc = StandardScaler()
-        print('i came in feature')
         for item in columns:
             dataframe[:, item:item+1] = sc.fit_transform(dataframe[:, item:item+1])
         return dataframe
+        
 
     
     #Currently replacing the NaN by mean
@@ -52,7 +52,6 @@ class Numeric():
             dataframe[:,item:item+1] = imputer.transform(dataframe[:,item:item+1])
         return dataframe
         
-        #print('I do the handling null for numbers')
 
 
 class Text ():
@@ -95,27 +94,31 @@ class Text ():
     def stemming(self, dataframe, *columns):
         '''Does porter stemming only as of now'''
         from nltk.stem.porter import PorterStemmer
+        ps = PorterStemmer()
         for item in columns:
             for i in range (len(dataframe)):
                 text = str(dataframe[i:i+1, item:item+1])
                 text = text[3:-3] #To remove the [['']] from the string
                 text = text.split()
-                ps = PorterStemmer()
                 text = [ps.stem(word) for word in text]
                 text = ' '.join(text)
                 dataframe[i:i+1, item:item+1] = text
 
         return dataframe
 
-    def lemmetization(self, text):
-        '''
+    def lemmetization(self, dataframe, *columns):
+        from nltk.stem import WordNetLemmatizer
         lemmatizer = WordNetLemmatizer()
-        token_list = [i for i in text.split(' ')]
-        lemma_list = [lemmatizer.lemmatize(i) for i in token_list]
-        new_text = ' '.join(i for i in lemma_list)
-        return new_text'''
-        pass
-
+        for item in columns:
+            for i in range (len(dataframe)):
+                text = str(dataframe[i:i+1, item:item+1])
+                text = text[3:-3]
+                text = text.split()
+                text = [lemmatizer.lemmatize(word) for word in text]
+                text = ' '.join(i for i in text)
+                dataframe[i:i+1, item:item+1] = text
+        return dataframe
+        
     def stopword_removal(self, dataframe, *columns):
         from nltk.corpus import stopwords
         for item in columns:
