@@ -24,19 +24,21 @@ class Configuration:
 
 
 class Numeric():
-    def __init__(self):
+    def __init__(self, dataframe, *columns):
         if Configuration._handle_numeric_null == True:
-            self.handle_null()
+            for item in columns:
+                self.handle_null(dataframe, item)
         if Configuration._feature_scaling == True:
-            self.feature_scaling()
+            for item in columns:
+                self.handle_null(dataframe, item)
 
 
     def feature_scaling(self, dataframe, *columns):
         from sklearn.preprocessing import StandardScaler
         sc = StandardScaler()
+        print('i came in feature')
         for item in columns:
             dataframe[:, item:item+1] = sc.fit_transform(dataframe[:, item:item+1])
-        print('Feature scaling completed')
         return dataframe
 
     
@@ -48,52 +50,84 @@ class Numeric():
             item = int(item)
             imputer = imputer.fit(dataframe[:,item:item+1])
             dataframe[:,item:item+1] = imputer.transform(dataframe[:,item:item+1])
-        print('Null handling completed')
         return dataframe
         
         #print('I do the handling null for numbers')
 
 
 class Text ():
-    def __init__(self, text):
-
+    def __init__(self, dataframe, *columns):
         if Configuration._only_alpha==True:
-            self.only_alphabets()
+            for item in columns:
+                self.only_alphabets(dataframe, item)
         if Configuration._stem==True:
-            self.stemming()
+            for item in columns:
+                self.stemming(dataframe, item)
         if Configuration._lemma==True:
-            self.lemmetization()
+            for item in columns:
+                self.lemmetization(dataframe, item)
         if Configuration._stopword_removal==True:
-            self.stopword_removal()
+            for item in columns:
+                self.stopword_removal(dataframe, item)
         if Configuration._handle_text_null==True:
-            self.handle_null()
+            for item in columns:
+                self.handle_null(dataframe, item)
+        
 
-    def only_alphabets(self):
-        pass
+    def only_alphabets(self, dataframe, *columns):
+        '''How to handle nltk.download('stopwords')'''
+        import re
+        from nltk.stem.porter import PorterStemmer
+        from nltk.corpus import stopwords
+        for item in columns:
+            for i in range (len(dataframe)):
+                text = re.sub('[^a-zA-Z]', ' ', str(dataframe[i:i+1,item:item+1]))
+                text = re.sub(' +', ' ', text)
+                text = text.lower()
+                #text = text.split()
+                #ps = PorterStemmer()
+                #text = [ps.stem(word) for word in text if not word in set(stopwords.words('english'))]
+                #text = ' '.join(text)
+                dataframe[i:i+1, item:item+1] = text
 
-    def stemming(self, text):
-        ps = nltk.PorterStemmer()
-        text = ' '.join([ps.stem(word) for word in text.split()])
-        return text
+        return dataframe
+
+    def stemming(self, dataframe, *columns):
+        '''Does porter stemming only as of now'''
+        from nltk.stem.porter import PorterStemmer
+        for item in columns:
+            for i in range (len(dataframe)):
+                text = str(dataframe[i:i+1, item:item+1])
+                text = text[3:-3] #To remove the [['']] from the string
+                text = text.split()
+                ps = PorterStemmer()
+                text = [ps.stem(word) for word in text]
+                text = ' '.join(text)
+                dataframe[i:i+1, item:item+1] = text
+
+        return dataframe
 
     def lemmetization(self, text):
+        '''
         lemmatizer = WordNetLemmatizer()
         token_list = [i for i in text.split(' ')]
         lemma_list = [lemmatizer.lemmatize(i) for i in token_list]
         new_text = ' '.join(i for i in lemma_list)
-        return new_text
+        return new_text'''
+        pass
 
-    def stopword_removal(self, text, is_lower_case=False):
-        stopword_list = nltk.corpus.stopwords.words('english')
-        tokenizer = ToktokTokenizer()
-        tokens = tokenizer.tokenize(text)
-        tokens = [token.strip() for token in tokens]
-        if is_lower_case:
-            filtered_tokens = [token for token in tokens if token not in stopword_list]
-        else:
-            filtered_tokens = [token for token in tokens if token.lower() not in stopword_list]
-        filtered_text = ' '.join(filtered_tokens)
-        return filtered_text
+    def stopword_removal(self, dataframe, *columns):
+        from nltk.corpus import stopwords
+        for item in columns:
+            for i in range (len(dataframe)):
+                text = str(dataframe[i:i+1,item:item+1])
+                text = text[3:-3]
+                text = text.split()
+                text = [word for word in text if not word in set(stopwords.words('english'))]
+                text = ' '.join(text)
+                dataframe[i:i+1, item:item+1] = text
+
+        return dataframe
 
     def handle_null(self):
         pass
