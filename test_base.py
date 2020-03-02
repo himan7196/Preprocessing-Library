@@ -1,23 +1,45 @@
 import base
 import pandas as pd
+import json
+import csv
 
-dataset = pd.read_csv('Data.csv')
 
-X = dataset.iloc[:, :-1].values
-Y = dataset.iloc[:, 4:5].values
+def read_config(file_path):
+    with open(file_path) as f:
+        config = json.load(f)
+    return config
+config = read_config('configuration.json')
 
-base.Configuration.numerical_data_configuration(base.Configuration, feature_scaling=True, handle_null= True,)
-base.Configuration.text_data_configuration(base.Configuration, only_alpha=True, stem=True, stopword_removal=True)
 
-print(X)
+input_file_path = config["input_file_path"]
+numeric_columns = config["numeric_columns"]
+text_columns = config["text_columns"]
+output = config["output_file_name"]
 
-X = base.Text.lemmetization(base.Text, X, 3)
+if numeric_columns:
+    for i in range(len(numeric_columns)):
+        numeric_columns[i] = int(numeric_columns[i])
+if text_columns:
+    for i in range(len(text_columns)):
+        text_columns[i] = int(text_columns[i])
+
+
+dataset = pd.read_csv(input_file_path)
+headings = [item for item in dataset.columns]
+
+X = dataset.iloc[:, :].values
+
+base.Numeric(feature_scaling=config["feature_scaling"], handle_null=config["handle_null"], dataframe=X, columns=numeric_columns)
+base.Text(only_alpha=config["only_alpha"], stem=config["stem"], lemma=config["lemma"], stopword_removal=["stopword_removal"], handle_null=["handle_null_text"], dataframe=X, columns=text_columns)
+
 
 
 print('\n\n\n\n')
 
-print(X)
-
+with open("processed.csv", 'w', newline='') as file:
+    writer = csv.writer(file)
+    writer.writerow(headings)
+    writer.writerows(X)
 
 '''
 

@@ -1,0 +1,18 @@
+{
+    "input_file_path": "data.csv",
+    "numeric_columns": ["1", "2"],
+    "text_columns": ["3"],
+    "output_file_name": "",
+
+    "feature_scaling": true,
+    "handle_null": true,
+
+
+
+    "only_alpha" : true,
+    "stem": true,
+    "lemma": true,
+    "stopword_removal": true,
+    "handle_null_text": false
+
+}
