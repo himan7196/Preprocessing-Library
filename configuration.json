@@ -1,18 +1,19 @@
 {
     "input_file_path": "data.csv",
     "numeric_columns": "",
-    "text_columns": "",
+    "text_columns": ["3"],
+    "category_columns": ["0"],
     "output_file_name": "newFile",
 
-    "feature_scaling": true,
+    "feature_scaling": false,
     "handle_null": true,
 
+    "label_encoding": true,
+    "one_hot_encoding": true,
 
-
-    "only_alpha" : true,
-    "stem": true,
-    "lemma": true,
-    "stopword_removal": true,
-    "handle_null_text": false
+    "only_alpha" : false,
+    "stem": false,
+    "lemma": false,
+    "stopword_removal": false
 
 }
