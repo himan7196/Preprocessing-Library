@@ -1,8 +1,8 @@
 {
     "input_file_path": "data.csv",
-    "numeric_columns": ["1", "2"],
-    "text_columns": ["3"],
-    "output_file_name": "",
+    "numeric_columns": "",
+    "text_columns": "",
+    "output_file_name": "newFile",
 
     "feature_scaling": true,
     "handle_null": true,
