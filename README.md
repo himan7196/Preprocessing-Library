@@ -1,9 +1,9 @@
-# PREPROCESS
+# PREPROCESSING-LIBRARY
 Currently this supports below functionalities. Assign the values in the *configuration.json* file
 
 ## BASIC CONFIGURATION
 
-- **Input file path and output file name**
+- **Input file path and output file name** : 
 Expects a *string* type input.
 Default:
     *output_file_name* = "processed"
@@ -13,7 +13,7 @@ Default:
         "output_file_name": "filename"
     }
 ```
-- **Column numbers for specific data type**
+- **Column numbers for specific data type** : 
 Expect a *list* based input. In case of null, action will be performed on all the columns of specific types.
 ```json
     {
@@ -23,7 +23,7 @@ Expect a *list* based input. In case of null, action will be performed on all th
     }
 ```
 
-- **Limit for categorical classification**
+- **Limit for categorical classification** : 
 Expects an *integer* type value.
 ```json
     {
