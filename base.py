@@ -21,11 +21,9 @@ from sklearn.compose import ColumnTransformer
 # nltk.download('wordnet')
 
 class Categorical:
-    def __init__(self, label_encoding, one_hot_encoding, data, columns):
+    def __init__(self, label_encoding, data, columns):
         if label_encoding == True:
             self.label_encoding(data, columns)
-        if one_hot_encoding == True:
-            self.one_hot_encoding(data, columns)
 
 
     def label_encoding(self, data, columns):
@@ -33,11 +31,6 @@ class Categorical:
             lab_enc = LabelEncoder()
             data[:, item] = lab_enc.fit_transform(data[:, item])
         return data
-    
-    def one_hot_encoding(self, data, columns):
-        
-        for item in columns:
-            ohc = OneHotEncoder(categorical_features = [item])
             
 
 
@@ -130,7 +123,6 @@ class Text ():
                 text = [word for word in text if not word in set(stopwords.words('english'))]
                 text = ' '.join(text)
                 data[i:i+1, item:item+1] = text
-
         return data
 
 
