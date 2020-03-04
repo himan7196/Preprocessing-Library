@@ -71,16 +71,14 @@ def validate_columns(numeric_columns, text_columns, category_columns):
 numeric_columns, text_columns, category_columns = validate_columns(numeric_columns, text_columns, category_columns)
 
 if not output_file_name:
-    output_file_name = 'processed'
-
-
-
-print(category_columns)
+    output_file_name = '..\\files\\processed\\processed'
+else:
+    output_file_name = '..\\files\\processed\\'+output_file_name
 
 X = dataset.iloc[:, :].values
 
 
-base.Numeric(feature_scaling=config["feature_scaling"], handle_null=config["handle_null"], data=X, columns=numeric_columns)
+base.Numeric(feature_scaling=config["feature_scaling"], handle_null=config["handle_null"], handle_null_strategy= config["handle_null_strategy"], data=X, columns=numeric_columns)
 base.Text(only_alpha=config["only_alpha"], stem=config["stem"], lemma=config["lemma"], stopword_removal=["stopword_removal"], data=X, columns=text_columns)
 base.Categorical(label_encoding = config["label_encoding"], data=X, columns=category_columns)
 
@@ -88,8 +86,8 @@ base.Categorical(label_encoding = config["label_encoding"], data=X, columns=cate
 dataframe = pd.DataFrame(data=X[:,:], columns=headings)
 feather.write_dataframe(dataframe, output_file_name)
 
-new = pd.read_feather(output_file_name)
-print(new.iloc[:,:].values)
+#new = pd.read_feather(output_file_name)
+#print(new.iloc[:,:].values)
 
 
 #Writing to csv

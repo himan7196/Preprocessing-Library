@@ -1,5 +1,5 @@
 {
-    "input_file_path": "data.csv",
+    "input_file_path": "dataset\\data.csv",
     "numeric_columns": "",
     "text_columns": ["3"],
     "category_columns": "",
@@ -9,6 +9,7 @@
 
     "feature_scaling": true,
     "handle_null": true,
+    "handle_null_strategy": "mean",
 
     "label_encoding": true,
 
