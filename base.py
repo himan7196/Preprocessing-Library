@@ -7,10 +7,13 @@ import numpy
 import nltk
 import regex
 import logging
-    
+
+
+from dask_ml.impute import SimpleImputer
+#from dask_ml.preprocessing import StandardScaler
 from nltk.tokenize.toktok import ToktokTokenizer
 from sklearn.preprocessing import StandardScaler
-from sklearn.impute import SimpleImputer
+#from sklearn.impute import SimpleImputer
 from nltk.stem.porter import PorterStemmer
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
