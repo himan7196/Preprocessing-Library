@@ -14,7 +14,7 @@ Default:
     }
 ```
 - **Column numbers for specific data type** : 
-Expect a *list* based input. In case of null, action will be performed on all the columns of specific types.
+Expects *list* based inputs. In case of null, action will be performed on all the columns of specific types.
 ```json
     {
         "numeric_columns": ["1"],
@@ -24,18 +24,22 @@ Expect a *list* based input. In case of null, action will be performed on all th
 ```
 
 - **Limit for categorical classification** : 
-Expects an *integer* type value.
+Expects *integer* type values. Automatically classify the data type if no value provided in the column number section. 
 ```json
     {
+        "max_cat_for_num": 3,
         "max_token_limit": 5,
         "max_row_limit": 3, 
     }
 ```
+*max_cat_for_num* : maximum number of categories allowed for numeric type.
 *max_token_limit* : maximum number of tokens for a row.
 *max_row_limit* : maximum number of rows for the threshold.
 
 *eg.* 
-for *max_token_limit* =4, *max_row_limit* =3, if 3 or more rows are found to be containing 4 or more tokens, it will not be considered as categorical type.
+- for *max_token_limit* =5, *max_row_limit* =3, if 3 or more rows are found to be containing 5 or more tokens, it will not be considered as categorical type.
+
+- for *max_cat_for_num* =3, if any numeric column has more than 3 distinct values, it will not be considered as categorical type.
 
 
 ## NUMERICAL

@@ -25,8 +25,10 @@ dataset = pd.read_csv(input_file_path)
 dataset_dask = df.read_csv(input_file_path)
 
 
-
 headings = [item for item in dataset.columns]
+
+
+print(headings)
 
 def validate_columns(numeric_columns, text_columns, category_columns):
     if numeric_columns:
@@ -54,6 +56,7 @@ def validate_columns(numeric_columns, text_columns, category_columns):
         temp_list = []
         total_list = []
         for i in range (len(headings)):
+            print('checking ',i)
             if dataset.dtypes[headings[i]]==object or dataset.dtypes[headings[i]]==str:
                 total_list.append(i)
                 temp = dataset.iloc[:,i].values
@@ -67,8 +70,21 @@ def validate_columns(numeric_columns, text_columns, category_columns):
                         if row_counter>row_counter_limit:
                             temp_list.append(i)
                             break
-        category_columns = list(set(total_list)-set(temp_list))
+            elif dataset.dtypes[headings[i]]==float or dataset.dtypes[headings[i]]==int:
+                total_list.append(i)
+                temp = dataset.iloc[:,i].values
+                set_of_temp = set(temp)
+                max_cat_for_num = config["max_cat_for_num"]
+                print(set_of_temp)
+                if len(set_of_temp)>max_cat_for_num:
+                    temp_list.append(i)
 
+        category_columns = list(set(total_list)-set(temp_list))
+        for item in category_columns:
+            if item in numeric_columns:
+                numeric_columns.remove(item)
+            if item in text_columns:
+                text_columns.remove(item)
 
                 
                 #print(temp)
@@ -76,7 +92,7 @@ def validate_columns(numeric_columns, text_columns, category_columns):
     return numeric_columns, text_columns, category_columns, 1
 
 numeric_columns, text_columns, category_columns, code = validate_columns(numeric_columns, text_columns, category_columns)
-
+print(numeric_columns, text_columns, category_columns)
 
 
 if not output_file_name:

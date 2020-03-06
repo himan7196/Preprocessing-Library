@@ -1,8 +1,9 @@
 {
     "input_file_path": "dataset\\data.csv",
     "numeric_columns": "",
-    "text_columns": ["3"],
+    "text_columns": "",
     "category_columns": "",
+    "max_cat_for_num": 3,
     "max_token_limit": 5,
     "max_row_limit": 3, 
     "output_file_name": "newFile",
