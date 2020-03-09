@@ -25,11 +25,12 @@ from logging.handlers import RotatingFileHandler
 # nltk.download('wordnet')
 
 
+size = 2097152 #2MB
 format = "%(name)s - %(process)d - %(asctime)s -%(levelname)s - %(message)s"
 logger = logging.getLogger("Logger")
 logger.setLevel(logging.INFO)
 format = logging.Formatter(format)
-handler = RotatingFileHandler(filename = "logs\\log_report.log", mode='w', maxBytes=4096 , backupCount=5)
+handler = RotatingFileHandler(filename = "logs\\ppl_report.log", mode='w', maxBytes=size , backupCount=5)
 handler.setFormatter(format)
 logger.addHandler(handler)
 
@@ -43,6 +44,7 @@ class Categorical:
 
     def label_encoding(self, data, columns):
         for item in columns:
+            logger.info('Performing label encoding for column: '+str(item))
             lab_enc = LabelEncoder()
             data[:, item] = lab_enc.fit_transform(data[:, item])
             logger.info('Label encoding success')
@@ -65,6 +67,7 @@ class Numeric():
     def feature_scaling(self, data, columns):
         sc = StandardScaler()
         for item in columns:
+            logger.info('Performing feature scaling for column: '+str(item))
             data[:, item:item+1] = sc.fit_transform(data[:, item:item+1])
         logger.info('Feature scaling success')
         return data
@@ -75,6 +78,7 @@ class Numeric():
     def handle_null(self, data, handle_null_strategy, columns):
         imputer = SimpleImputer(missing_values = numpy.nan, strategy = handle_null_strategy)
         for item in columns:
+            logger.info('Performing null handling for column: '+str(item))
             item = int(item)
             imputer = imputer.fit(data[:,item:item+1])
             data[:,item:item+1] = imputer.transform(data[:,item:item+1])
@@ -103,6 +107,7 @@ class Text ():
     def only_alphabets(self, data, columns):
         '''How to handle nltk.download('stopwords')'''
         for item in columns:
+            logger.info('Performing only alphabets for column: '+str(item))
             for i in range (len(data)):
                 text = re.sub('[^a-zA-Z]', ' ', str(data[i:i+1,item:item+1]))
                 text = re.sub(' +', ' ', text)
@@ -118,6 +123,7 @@ class Text ():
     def stemming(self, data, columns):
         ps = PorterStemmer()
         for item in columns:
+            logger.info('Performing stemming for column: '+str(item))
             for i in range (len(data)):
                 text = str(data[i:i+1, item:item+1])
                 text = text[3:-3] #To remove the [['']] from the string
@@ -131,6 +137,7 @@ class Text ():
     def lemmetization(self, data, columns):
         lemmatizer = WordNetLemmatizer()
         for item in columns:
+            logger.info('Performing lemmetization for column: '+str(item))
             for i in range (len(data)):
                 text = str(data[i:i+1, item:item+1])
                 text = text[3:-3]
@@ -143,6 +150,7 @@ class Text ():
         
     def stopword_removal(self, data, columns):
         for item in columns:
+            logger.info('Performing stopwords removal for column: '+str(item))
             for i in range (len(data)):
                 text = str(data[i:i+1,item:item+1])
                 text = text[3:-3]
@@ -152,10 +160,6 @@ class Text ():
                 data[i:i+1, item:item+1] = text
         logger.info('Stopwords removal success')
         return data
-
-
-
-
 
 
 
