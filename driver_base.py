@@ -123,7 +123,7 @@ X_dask = dataset_dask.iloc[:,:].values
 base.logger.info('Calling the method for numeric data')
 base.Numeric(feature_scaling=config["feature_scaling"], handle_null=config["handle_null"], handle_null_strategy= config["handle_null_strategy"], data=X, columns=numeric_columns)
 base.logger.info('Calling the method for text data')
-base.Text(only_alpha=config["only_alpha"], stem=config["stem"], lemma=config["lemma"], stopword_removal=["stopword_removal"], data=X, columns=text_columns)
+base.Text(only_alpha=config["only_alpha"], stem=config["stem"], lemma=config["lemma"], stopword_removal=config["stopword_removal"], count_vect = config["count_vect"], data=X, columns=text_columns)
 base.logger.info('Calling the method for categorical data')
 base.Categorical(label_encoding = config["label_encoding"], data=X, columns=category_columns)
 
@@ -134,7 +134,6 @@ base.logger.info('Feather file written')
 
 
 base.logger.info('Script ended. Output directory: '+output_file_name+'\n\n')
-
 
 #new = pd.read_feather(output_file_name)
 #print(new.iloc[:,:].values)

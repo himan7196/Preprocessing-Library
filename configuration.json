@@ -6,7 +6,7 @@
     "max_cat_for_num": 3,
     "max_token_limit": 5,
     "max_row_limit": 3, 
-    "output_file_name": "newFile",
+    "output_file_name": "",
 
     "feature_scaling": true,
     "handle_null": true,
@@ -17,6 +17,7 @@
     "only_alpha" : true,
     "stem": true,
     "lemma": true,
-    "stopword_removal": true
+    "stopword_removal": true,
+    "count_vect": true
 
 }

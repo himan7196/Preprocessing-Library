@@ -20,6 +20,7 @@ from nltk.corpus import stopwords
 from sklearn.preprocessing import OneHotEncoder, LabelEncoder
 from sklearn.compose import ColumnTransformer
 from logging.handlers import RotatingFileHandler
+from sklearn.feature_extraction.text import CountVectorizer
 # Download the required data
 # nltk.download('stopwords')
 # nltk.download('wordnet')
@@ -88,7 +89,11 @@ class Numeric():
 
 
 class Text ():
-    def __init__(self, only_alpha, stem, lemma, stopword_removal, data, columns):
+    
+    corpus = []
+    count_vect_list = []
+
+    def __init__(self, only_alpha, stem, lemma, stopword_removal, count_vect, data, columns):
         logger.info('Text class instantiated')
         if only_alpha==True:
             logger.info('Launching the only alpahbets')
@@ -102,6 +107,10 @@ class Text ():
         if stopword_removal==True:
             logger.info('Launching the stopwords removal')
             self.stopword_removal(data, columns)
+        if count_vect==True:
+            logger.info('Launching the count vectorizer')
+            self.count_vectorizer(data, columns)
+        
         
 
     def only_alphabets(self, data, columns):
@@ -151,6 +160,7 @@ class Text ():
     def stopword_removal(self, data, columns):
         for item in columns:
             logger.info('Performing stopwords removal for column: '+str(item))
+            temp_corpus = []
             for i in range (len(data)):
                 text = str(data[i:i+1,item:item+1])
                 text = text[3:-3]
@@ -158,7 +168,20 @@ class Text ():
                 text = [word for word in text if not word in set(stopwords.words('english'))]
                 text = ' '.join(text)
                 data[i:i+1, item:item+1] = text
+                temp_corpus.append(text)
+            logger.info('Corpus made for this column')
+            Text.corpus.append(temp_corpus)
         logger.info('Stopwords removal success')
+        return data
+
+    
+    def count_vectorizer(self, data, columns):
+        if len(Text.corpus)>=1:
+            cv = CountVectorizer()
+            for item in Text.corpus:
+                x = cv.fit_transform(item).toarray()
+                Text.count_vect_list.append(x)
+        logger.info('Count vectorizer success')
         return data
 
 

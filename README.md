@@ -91,6 +91,16 @@ Expects a *boolean* type input.
     }
 ```
 
+- **Count Vectorizer** :
+```
+    Currently it stores the count vectors of specified columns in a list that is a Text class object. Needs to be modified.
+```
+Expects a *boolean* type input.
+```json
+    {
+        "count_vect": true
+    }
+```
  
 ## CATEGORICAL
 - **Encoding** :
